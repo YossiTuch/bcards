@@ -1,34 +1,49 @@
 const About = () => {
   return (
     <div className="mx-auto min-h-screen w-2/3 text-center">
-      <h1 className="mt-20 text-4xl">About</h1>
-      <p className="mt-20 text-2xl">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae ab
-        molestiae at, quam earum voluptates enim! Ullam consectetur, minima
-        doloremque veniam alias delectus in, vero eveniet quidem rem aliquid
-        laborum. Repellat placeat reiciendis nulla vel veritatis totam quidem
-        optio laboriosam, deserunt labore. Fugiat natus soluta ab sint nesciunt
-        delectus tenetur reprehenderit, nostrum enim deserunt eum ullam odio,
-        eius ipsum quidem. Nobis, cupiditate pariatur maxime eum quidem cumque
-        sequi omnis architecto, magnam rem natus ipsa inventore officia beatae
-        possimus totam nisi, ab nulla sint quo doloribus delectus sunt quaerat
-        accusamus! Esse! Officia soluta culpa sunt repudiandae quos laborum est
-        architecto quasi voluptas eos, corporis velit. Tempore repellat cumque
-        quae ullam tempora? Molestiae modi assumenda temporibus exercitationem
-        recusandae, facere tempora rem est? Omnis at delectus corrupti qui
-        officiis sit adipisci ut praesentium, quas necessitatibus, quod ex quae
-        hic. Placeat odit at autem. Commodi ad maxime neque inventore optio nisi
-        ex iure illum? Quibusdam, hic laboriosam temporibus officia nisi ad
-        asperiores consectetur odit natus mollitia optio fugit qui tempore
-        laudantium, fuga maxime quas, adipisci eligendi deleniti amet! Voluptate
-        culpa ipsum earum perspiciatis cupiditate. Nemo eum dolor consectetur
-        possimus, maxime magnam saepe veniam laborum sequi voluptates
-        exercitationem, excepturi quo? Iusto in, voluptates error sint, amet
-        architecto harum voluptatem voluptatum mollitia enim expedita, dolorum
-        soluta? Sed magni sunt odit facere accusamus mollitia vitae a non, ab,
-        accusantium, porro tempore fugit? Recusandae, necessitatibus iste.
-      </p>
+      <h1 className="mt-20 text-4xl font-bold">About BCards</h1>
+      <div className="mt-12 space-y-8 text-left">
+        <section className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-white">Our Mission</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            BCards is designed to revolutionize how professionals manage and share their business contacts. 
+            We provide a modern, digital solution for organizing business cards, making networking more efficient 
+            and environmentally friendly.
+          </p>
+        </section>
+
+        <section className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-white">Key Features</h2>
+          <ul className="list-inside list-disc space-y-2 text-lg text-gray-600 dark:text-gray-300">
+            <li>Create and customize digital business cards</li>
+            <li>Organize your contacts efficiently</li>
+            <li>Share cards instantly with other professionals</li>
+            <li>Save favorite contacts for quick access</li>
+            <li>Business-specific features for company cards</li>
+          </ul>
+        </section>
+
+        <section className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-white">How It Works</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Simply create an account, design your digital business card, and start networking! 
+            Business users can create and manage multiple cards, while regular users can collect 
+            and organize cards from their professional network. Our platform makes it easy to 
+            stay connected and grow your professional relationships.
+          </p>
+        </section>
+
+        <section className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+          <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-white">Contact Us</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Have questions or suggestions? We'd love to hear from you! 
+            Reach out to our support team, and we'll be happy to assist you 
+            with any inquiries about our digital business card platform.
+          </p>
+        </section>
+      </div>
     </div>
   );
 };
+
 export default About;

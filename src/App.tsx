@@ -31,8 +31,9 @@ function App() {
   useEffect(() => {
     const initializeAuth = async () => {
       // Check both storages for token
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-      
+      const token =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
+
       if (token) {
         try {
           const parsedToken = jwtDecode(token) as TToken;
@@ -40,7 +41,7 @@ function App() {
 
           const res = await axios.get(
             "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/" +
-              parsedToken._id
+              parsedToken._id,
           );
 
           dispatch(userActions.login(res.data));
@@ -48,7 +49,7 @@ function App() {
           console.error("Token validation failed", error);
           localStorage.removeItem("token");
           sessionStorage.removeItem("token");
-          navigate("/login");
+          navigate("/home");
         }
       }
     };

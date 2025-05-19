@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { TCard } from "../types/TCard";
-import { Card, HR, Spinner } from "flowbite-react";
+import { Button, Card, HR, Spinner } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { TRootState } from "../store/store";
@@ -103,6 +103,7 @@ const Home = () => {
                 className="m-5 mx-auto mt-10 max-sm:w-[90%] lg:w-96"
               >
                 <Card
+                onClick={() => {navigate('/card/' + bcard._id)}}
                   renderImage={() => (
                     <img
                       src={bcard.image.url}
@@ -126,13 +127,11 @@ const Home = () => {
                     <b>Card Number</b>: {bcard.bizNumber}
                   </h2>
                   <HR />
-                  <div className="flex justify-between">
+                  <div className="flex self-center">
                     <FaHeart
                       onClick={() => likeOrUnlikeCard(bcard._id)}
                       className={`cursor-pointer text-2xl ${isLiked ? "text-red-500 hover:text-red-300" : "text-gray-500 hover:text-gray-700"}`}
                     />
-                    <h2>Hi</h2>
-                    <h3>Hi</h3>
                   </div>
                 </Card>
               </div>
