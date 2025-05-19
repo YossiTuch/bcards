@@ -16,12 +16,17 @@ const RouteGuard = (props: RouteGuardProps) => {
     return state.userSlice.user;
   });
 
-  if (!user) {
+  // Check for token in both storage locations
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+  if (!token || !user) {
     return <Navigate to="/login" />;
   }
+
   if (isBiz && !user.isBusiness) {
     return <Navigate to="/" />;
   }
+  
   if (isAdmin && !user.isAdmin) {
     return <Navigate to="/" />;
   }

@@ -1,5 +1,4 @@
-import { Route, Routes } from "react-router-dom";
-// import Footer from "./layout/Footer";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Header from "./layout/Header";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -11,6 +10,12 @@ import RouteGuard from "./components/RouteGuard";
 import MyCards from "./pages/MyCards";
 import Favorites from "./pages/Favorites";
 import CardDetails from "./pages/CardDetails";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { userActions } from "./store/userSlice";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import type { TToken } from "./types/TToken";
 import {
   Footer,
   FooterCopyright,
@@ -20,6 +25,37 @@ import {
 import LogoutModal from "./components/LogoutModal";
 
 function App() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      // Check both storages for token
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      
+      if (token) {
+        try {
+          const parsedToken = jwtDecode(token) as TToken;
+          axios.defaults.headers.common["x-auth-token"] = token;
+
+          const res = await axios.get(
+            "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/" +
+              parsedToken._id
+          );
+
+          dispatch(userActions.login(res.data));
+        } catch (error) {
+          console.error("Token validation failed", error);
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    };
+
+    initializeAuth();
+  }, [dispatch, navigate]);
+
   return (
     <>
       <div className="dark:bg-gray-900 dark:text-white">
@@ -29,7 +65,6 @@ function App() {
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
-
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />

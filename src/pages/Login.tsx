@@ -1,5 +1,5 @@
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Button, FloatingLabel, HelperText } from "flowbite-react";
+import { Button, FloatingLabel, HelperText, Checkbox } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { LoginSchema } from "../validations/login.joi";
 import axios from "axios";
@@ -9,12 +9,13 @@ import { userActions } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import type { TToken } from "../types/TToken";
+import { useState } from "react";
 
 type formData = { email: string; password: string };
 const Login = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(false);
 
   const {
     register,
@@ -36,11 +37,14 @@ const Login = () => {
         data,
       );
 
-      localStorage.setItem("token", token.data);
+      // Store token based on remember me preference
+      if (rememberMe) {
+        localStorage.setItem("token", token.data);
+      } else {
+        sessionStorage.setItem("token", token.data);
+      }
 
       const parsedToken = jwtDecode(token.data) as TToken;
-
-      // const parsedToken = JSON.parse(atob(token.data.split(".")[1]));
 
       axios.defaults.headers.common["x-auth-token"] = token.data;
 
@@ -49,9 +53,7 @@ const Login = () => {
           parsedToken._id,
       );
 
-      console.log(res.data);
       dispatch(userActions.login(res.data));
-
       toast.success("Logged in Successfully");
       navigate("/profile");
     } catch (error) {
@@ -90,6 +92,18 @@ const Login = () => {
         <HelperText className="w-80 text-left" color="failure">
           {errors.password?.message}
         </HelperText>
+        <div className="flex w-80 items-center">
+          <Checkbox
+            id="remember"
+            className="border-black rounded-full"
+            color="blue"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          <label htmlFor="remember" className="ml-2 text-sm">
+            Remember me
+          </label>
+        </div>
         <Button className="w-80" disabled={!isValid} type="submit">
           Submit
         </Button>
