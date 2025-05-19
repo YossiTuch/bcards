@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.icon-button {
+  @apply rounded-full hover:bg-slate-400 active:bg-slate-200 dark:hover:bg-slate-700 dark:active:bg-slate-600;
+}
