@@ -16,7 +16,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="sticky top-0 z-50">
@@ -33,7 +33,7 @@ const Header = () => {
           <div className="flex items-center gap-6 max-md:flex-col">
             {/* User Navigation Links */}
             <div className="flex items-center gap-6 max-md:flex-col">
-              {user && (
+              {isAuthenticated && user && (
                 <>
                   <NavbarLink
                     className="text-lg hover:text-green-700 dark:hover:text-green-400"
@@ -69,7 +69,7 @@ const Header = () => {
 
             {/* Auth Links */}
             <div className="flex items-center gap-6 max-md:flex-col">
-              {!user ? (
+              {!isAuthenticated ? (
                 <>
                   <NavbarLink
                     className="text-lg hover:text-green-700 dark:hover:text-green-400"
