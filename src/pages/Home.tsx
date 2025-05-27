@@ -1,36 +1,30 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { TCard } from "../types/TCard";
-import { Card, HR, Pagination, Spinner } from "flowbite-react";
-import { useNavigate } from "react-router-dom";
+import { Spinner } from "flowbite-react";
 import { useSelector } from "react-redux";
 import type { TRootState } from "../store/store";
-import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { PaginatedCardGrid } from "../components/PaginatedCardGrid";
+import { useAuth } from "../hooks/useAuth";
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [bcards, setBcards] = useState<TCard[]>([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
-  const onPageChange = (page: number) => setCurrentPage(page);
-
-  const navigate = useNavigate();
 
   const searchWord = useSelector(
     (state: TRootState) => state.searchSlice.searchWord,
   );
-  const user = useSelector((state: TRootState) => state.userSlice.user);
+  const { user, requireAuth, getAuthHeaders } = useAuth();
 
-  const filterBySearch = () => {
-    return bcards.filter((bcard) => {
-      return (
+  const filterBySearch = () =>
+    bcards.filter(
+      (bcard) =>
         bcard.title.toLowerCase().includes(searchWord.toLowerCase()) ||
-        bcard.subtitle.toLowerCase().includes(searchWord.toLowerCase())
-      );
-    });
-  };
+        bcard.subtitle.toLowerCase().includes(searchWord.toLowerCase()),
+    );
 
   const getCards = async () => {
     try {
@@ -49,51 +43,34 @@ const Home = () => {
 
   const toggleLike = async (cardId: string) => {
     try {
-      if (!user) {
-        toast.info("Please login to like cards");
-        navigate("/login");
-        return;
-      }
+      if (!requireAuth("Please login to like cards")) return;
 
-      const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
-      if (!token) {
-        toast.error("Authentication token missing");
-        navigate("/login");
-        return;
-      }
+      const headers = getAuthHeaders();
+      if (!headers) return;
 
       await axios.patch(
         `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${cardId}`,
         {},
-        {
-          headers: {
-            "x-auth-token": token,
-          },
-        },
-      ); // Check if the card is currently liked
-      const card = bcards.find((card) => card._id === cardId);
-      if (!card) {
-        toast.error("Card not found");
-        return;
-      }
-
-      const isLiked = card.likes.includes(user._id);
-      const newLikes = isLiked
-        ? card.likes.filter((like) => like !== user._id)
-        : [...card.likes, user._id];
-
-      // Update the card's like status in the local state
-      setBcards((prev) =>
-        prev.map((card) =>
-          card._id === cardId ? { ...card, likes: newLikes } : card,
-        ),
+        { headers },
       );
 
-      // Show toast after state update
-      toast.success(
-        isLiked ? "Card unliked successfully" : "Card liked successfully",
-      );
+      setBcards((prev) => {
+        const card = prev.find((c) => c._id === cardId);
+        if (!card) return prev;
+
+        const isLiked = card.likes.includes(user!._id);
+        const newLikes = isLiked
+          ? card.likes.filter((like) => like !== user!._id)
+          : [...card.likes, user!._id];
+
+        toast.success(
+          isLiked ? "Card unliked successfully" : "Card liked successfully",
+        );
+
+        return prev.map((c) =>
+          c._id === cardId ? { ...c, likes: newLikes } : c,
+        );
+      });
     } catch (error) {
       console.error("Error updating like status:", error);
       toast.error("Failed to update like status");
@@ -112,13 +89,6 @@ const Home = () => {
     );
   }
 
-  // Calculate Pagination
-  const indexOfLastCard = currentPage * itemsPerPage;
-  const indexOfFirstCard = indexOfLastCard - itemsPerPage;
-  const filteredCards = filterBySearch();
-  const currentCards = filteredCards.slice(indexOfFirstCard, indexOfLastCard);
-  const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
-
   return (
     <div className="min-h-screen">
       <div className="mx-10 my-10">
@@ -134,75 +104,15 @@ const Home = () => {
           No cards found. Please try again later.
         </div>
       ) : (
-        <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {currentCards.map((bcard) => {
-            const isLiked = user && bcard.likes.includes(user._id);
-            return (
-              <div
-                key={bcard._id}
-                className="m-5 mx-auto mt-10 max-sm:w-[90%] lg:w-96"
-              >
-                <Card className="transition-shadow duration-300 hover:shadow-xl">
-                  <div
-                    onClick={() => navigate(`/card/${bcard._id}`)}
-                    className="cursor-pointer"
-                  >
-                    <img
-                      src={bcard.image.url}
-                      alt={bcard.image.alt}
-                      className="h-[300px] w-full object-cover"
-                    />
-                    <h1 className="mt-4 text-2xl font-semibold">
-                      {bcard.title}
-                    </h1>
-                    <h2 className="w-full truncate text-gray-600">
-                      {bcard.description}
-                    </h2>
-                    <HR />
-                    <div className="space-y-2">
-                      <p>
-                        <b>Phone</b>: {bcard.phone}
-                      </p>
-                      <p>
-                        <b>Address</b>: {bcard.address.country}
-                      </p>
-                      <p>
-                        <b>Card Number</b>: {bcard.bizNumber}
-                      </p>
-                    </div>
-                  </div>
-                  <HR />
-                  <div
-                    className="flex justify-center gap-2"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <FaHeart
-                      onClick={() => toggleLike(bcard._id)}
-                      className={`cursor-pointer text-2xl ${
-                        isLiked
-                          ? "text-red-500 hover:text-red-300"
-                          : "text-gray-500 hover:text-gray-700"
-                      }`}
-                    />
-                    <span>
-                      {bcard.likes.length}{" "}
-                      {bcard.likes.length === 1 ? "like" : "likes"}
-                    </span>
-                  </div>
-                </Card>
-              </div>
-            );
-          })}
-        </div>
-      )}
-      <div className="flex overflow-x-auto sm:justify-center">
-        <Pagination
+        <PaginatedCardGrid
+          cards={filterBySearch()}
           currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-          showIcons
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onLikeClick={toggleLike}
+          currentUserId={user?._id}
         />
-      </div>
+      )}
     </div>
   );
 };
