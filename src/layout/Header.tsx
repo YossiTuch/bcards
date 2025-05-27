@@ -8,78 +8,122 @@ import {
   TextInput,
 } from "flowbite-react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import type { TRootState } from "../store/store";
+import { useDispatch } from "react-redux";
 import { IoSearchSharp } from "react-icons/io5";
 import { searchActions } from "../store/searchSlice";
 import { ModalActions } from "../store/modalSlice";
+import { useAuth } from "../hooks/useAuth";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: TRootState) => state.userSlice.user);
+  const { user } = useAuth();
 
   return (
     <div className="sticky top-0 z-50">
-      <Navbar fluid className="bg-green-200 dark:bg-slate-800">
-        <NavbarBrand as={Link} to="/home">
-          <span className="text-xl font-bold whitespace-nowrap">
+      <Navbar fluid className="bg-green-200 shadow-md dark:bg-slate-700">
+        {/* Logo Section */}
+        <NavbarBrand as={Link} to="/home" className="flex items-center gap-2">
+          <span className="text-xl font-bold whitespace-nowrap hover:text-green-700 dark:hover:text-green-400">
             My Business Cards
           </span>
         </NavbarBrand>
-        <NavbarCollapse className="font-semibold max-md:order-2 max-md:text-center">
-          <div className="flex gap-10 max-md:flex-col max-md:gap-0">
-            {user && (
-              <NavbarLink className="text-xl" as={Link} to="/favorites">
-                Favorites
-              </NavbarLink>
-            )}
-            {user && user.isBusiness && (
-              <NavbarLink as={Link} to="/my-cards" className="text-xl">
-                My Cards
-              </NavbarLink>
-            )}
 
-            <TextInput
-              onChange={(e) =>
-                dispatch(searchActions.setSearchWord(e.target.value))
-              }
-              rightIcon={IoSearchSharp}
-            />
-            {/* <SearchBar /> */}
-            {!user && (
-              <>
-                <NavbarLink className="text-xl" as={Link} to="/login">
-                  Sign In
-                </NavbarLink>
-                <NavbarLink className="text-xl" as={Link} to="/register">
-                  Register
-                </NavbarLink>
-              </>
-            )}
-            {user && (
-              <>
-                <NavbarLink className="text-xl" as={Link} to="/profile">
-                  Profile
-                </NavbarLink>
-                <NavbarLink
-                  className="text-xl"
-                  as={Link}
-                  onClick={() => dispatch(ModalActions.openModal())}
-                >
-                  Logout
-                </NavbarLink>
-              </>
-            )}
-            <NavbarLink as={Link} to="/about" className="text-xl">
-              About
-            </NavbarLink>
+        {/* Main Navigation */}
+        <NavbarCollapse className="font-semibold max-md:order-2">
+          <div className="flex items-center gap-6 max-md:flex-col">
+            {/* User Navigation Links */}
+            <div className="flex items-center gap-6 max-md:flex-col">
+              {user && (
+                <>
+                  <NavbarLink
+                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
+                    as={Link}
+                    to="/favorites"
+                  >
+                    Favorites
+                  </NavbarLink>
+                  {user.isBusiness && (
+                    <NavbarLink
+                      as={Link}
+                      to="/my-cards"
+                      className="text-lg hover:text-green-700 dark:hover:text-green-400"
+                    >
+                      My Cards
+                    </NavbarLink>
+                  )}
+                </>
+              )}
+
+              {/* Search Bar */}
+              <div className="min-w-[200px]">
+                <TextInput
+                  onChange={(e) =>
+                    dispatch(searchActions.setSearchWord(e.target.value))
+                  }
+                  rightIcon={IoSearchSharp}
+                  placeholder="Search cards..."
+                  className="max-w-md"
+                />
+              </div>
+            </div>
+
+            {/* Auth Links */}
+            <div className="flex items-center gap-6 max-md:flex-col">
+              {!user ? (
+                <>
+                  <NavbarLink
+                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
+                    as={Link}
+                    to="/login"
+                  >
+                    Sign In
+                  </NavbarLink>
+                  <NavbarLink
+                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
+                    as={Link}
+                    to="/register"
+                  >
+                    Register
+                  </NavbarLink>
+                </>
+              ) : (
+                <>
+                  <NavbarLink
+                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
+                    as={Link}
+                    to="/profile"
+                  >
+                    Profile
+                  </NavbarLink>
+                  <NavbarLink
+                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
+                    as={Link}
+                    onClick={() => dispatch(ModalActions.openModal())}
+                  >
+                    Logout
+                  </NavbarLink>
+                </>
+              )}
+
+              <NavbarLink
+                as={Link}
+                to="/about"
+                className="text-lg hover:text-green-700 dark:hover:text-green-400"
+              >
+                About
+              </NavbarLink>
+            </div>
           </div>
         </NavbarCollapse>
 
-        <DarkThemeToggle />
-        <NavbarToggle />
+        {/* Theme Toggle & Mobile Menu */}
+        <div className="flex items-center gap-2">
+          <DarkThemeToggle />
+          <NavbarToggle />
+        </div>
       </Navbar>
     </div>
   );
 };
+
 export default Header;

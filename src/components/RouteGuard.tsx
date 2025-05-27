@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
-import { useSelector } from "react-redux";
-import { TRootState } from "../store/store";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 type RouteGuardProps = {
   children: ReactNode;
@@ -11,23 +10,17 @@ type RouteGuardProps = {
 
 const RouteGuard = (props: RouteGuardProps) => {
   const { children, isBiz, isAdmin } = props;
+  const { user, isAuthenticated } = useAuth();
 
-  const user = useSelector((state: TRootState) => {
-    return state.userSlice.user;
-  });
-
-  // Check for token in both storage locations
-  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-  if (!token || !user) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  if (isBiz && !user.isBusiness) {
+  if (isBiz && !user?.isBusiness) {
     return <Navigate to="/" />;
   }
   
-  if (isAdmin && !user.isAdmin) {
+  if (isAdmin && !user?.isAdmin) {
     return <Navigate to="/" />;
   }
 

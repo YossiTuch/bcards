@@ -16,12 +16,7 @@ import { userActions } from "./store/userSlice";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import type { TToken } from "./types/TToken";
-import {
-  Footer,
-  FooterCopyright,
-  FooterLink,
-  FooterLinkGroup,
-} from "flowbite-react";
+import MyFooter from "./layout/MyFooter";
 import LogoutModal from "./components/LogoutModal";
 
 function App() {
@@ -49,7 +44,8 @@ function App() {
           console.error("Token validation failed", error);
           localStorage.removeItem("token");
           sessionStorage.removeItem("token");
-          navigate("/home");
+          delete axios.defaults.headers.common["x-auth-token"];
+          navigate("/login");
         }
       }
     };
@@ -98,15 +94,10 @@ function App() {
           <Route path="/*" element={<Error />} />
         </Routes>
 
-        {/* Footer */}
-        <Footer container>
-          <FooterCopyright by="Yossi Tuchband" />
-          <FooterLinkGroup>
-            <FooterLink href="/about">About</FooterLink>
-          </FooterLinkGroup>
-        </Footer>
+        <MyFooter />
       </div>
     </>
   );
 }
+
 export default App;

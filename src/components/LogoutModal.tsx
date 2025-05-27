@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { TRootState } from "../store/store";
 import { Button, Modal, ModalBody, ModalHeader } from "flowbite-react";
 import { ModalActions } from "../store/modalSlice";
-import { userActions } from "../store/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const LogoutModal = () => {
@@ -12,9 +11,10 @@ const LogoutModal = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(userActions.logout());
+    dispatch({ type: "user/logout" });
     dispatch(ModalActions.closeModal());
   };
+
   return (
     <Modal
       show={isModalOpen}
@@ -26,18 +26,18 @@ const LogoutModal = () => {
       <ModalBody>
         <div className="text-center">
           <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-          <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-            Are You sure you want to logout?
-          </h1>
+          <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            Are you sure you want to log out?
+          </h3>
           <div className="flex justify-center gap-4">
-            <Button color="alternative" onClick={() => handleLogout()}>
-              Logout
+            <Button color="alternative" onClick={handleLogout} >
+              {"Yes, I'm sure"}
             </Button>
             <Button
               color="gray"
               onClick={() => dispatch(ModalActions.closeModal())}
             >
-              Cancel
+              No, cancel
             </Button>
           </div>
         </div>
@@ -45,4 +45,5 @@ const LogoutModal = () => {
     </Modal>
   );
 };
+
 export default LogoutModal;

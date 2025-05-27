@@ -9,7 +9,7 @@ export const useAuth = () => {
 
   const getToken = () => {
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (!token || !user) {
+    if (!token) {
       return null;
     }
     return token;
@@ -32,7 +32,7 @@ export const useAuth = () => {
 
   return {
     user,
-    isAuthenticated: !!user && !!getToken(),
+    isAuthenticated: !!getToken(),
     getToken,
     requireAuth,
     getAuthHeaders,

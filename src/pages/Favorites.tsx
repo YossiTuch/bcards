@@ -13,11 +13,12 @@ const Favorites = () => {
   const [bcards, setBcards] = useState<TCard[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   const searchWord = useSelector(
     (state: TRootState) => state.searchSlice.searchWord,
   );
-  const { user, requireAuth, getAuthHeaders } = useAuth();
+  const { user, requireAuth, getAuthHeaders, isAuthenticated } = useAuth();
 
   const filterBySearch = () =>
     bcards.filter((bcard) => {
@@ -30,7 +31,13 @@ const Favorites = () => {
   const getLikedCards = async () => {
     try {
       setLoading(true);
-      if (!requireAuth("Please login to view favorites")) return;
+
+      // Skip the requireAuth toast on initial load
+      if (!initialLoadDone) {
+        if (!isAuthenticated) return;
+      } else {
+        if (!requireAuth("Please login to view favorites")) return;
+      }
 
       const headers = getAuthHeaders();
       if (!headers) return;
@@ -46,9 +53,12 @@ const Favorites = () => {
       setBcards(likedCards);
     } catch (error) {
       console.error("Error fetching cards: ", error);
-      toast.error("Failed to load favorite cards");
+      if (initialLoadDone) {
+        toast.error("Failed to load favorite cards");
+      }
     } finally {
       setLoading(false);
+      setInitialLoadDone(true);
     }
   };
 
@@ -76,7 +86,7 @@ const Favorites = () => {
 
   useEffect(() => {
     getLikedCards();
-  }, [user]); // Reload when user changes
+  }, [user, isAuthenticated]); // Reload when user or auth status changes
 
   if (loading) {
     return (
