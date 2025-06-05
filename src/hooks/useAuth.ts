@@ -8,7 +8,8 @@ export const useAuth = () => {
   const user = useSelector((state: TRootState) => state.userSlice.user);
 
   const getToken = () => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
     if (!token) {
       return null;
     }

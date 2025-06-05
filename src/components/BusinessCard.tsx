@@ -9,13 +9,20 @@ interface BusinessCardProps {
   onLikeClick: (cardId: string) => void;
 }
 
-export const BusinessCard = ({ bcard, isLiked, onLikeClick }: BusinessCardProps) => {
+export const BusinessCard = ({
+  bcard,
+  isLiked,
+  onLikeClick,
+}: BusinessCardProps) => {
   const navigate = useNavigate();
 
   return (
     <div className="m-5 mx-auto mt-10 max-sm:w-[90%] lg:w-96">
       <Card className="transition-shadow duration-300 hover:shadow-xl">
-        <div onClick={() => navigate(`/card/${bcard._id}`)} className="cursor-pointer">
+        <div
+          onClick={() => navigate(`/card/${bcard._id}`)}
+          className="cursor-pointer"
+        >
           <img
             src={bcard.image.url}
             alt={bcard.image.alt}
@@ -25,13 +32,22 @@ export const BusinessCard = ({ bcard, isLiked, onLikeClick }: BusinessCardProps)
           <h2 className="w-full truncate text-gray-600">{bcard.description}</h2>
           <HR />
           <div className="space-y-2">
-            <p><b>Phone</b>: {bcard.phone}</p>
-            <p><b>Address</b>: {bcard.address.country}</p>
-            <p><b>Card Number</b>: {bcard.bizNumber}</p>
+            <p>
+              <b>Phone</b>: {bcard.phone}
+            </p>
+            <p>
+              <b>Address</b>: {bcard.address.country}
+            </p>
+            <p>
+              <b>Card Number</b>: {bcard.bizNumber}
+            </p>
           </div>
         </div>
         <HR />
-        <div className="flex justify-center gap-2" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="flex justify-center gap-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           <FaHeart
             onClick={() => onLikeClick(bcard._id)}
             className={`cursor-pointer text-2xl ${

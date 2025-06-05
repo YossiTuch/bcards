@@ -18,6 +18,7 @@ import { jwtDecode } from "jwt-decode";
 import type { TToken } from "./types/TToken";
 import MyFooter from "./layout/MyFooter";
 import LogoutModal from "./components/LogoutModal";
+import CreateCard from "./pages/CreateCard";
 
 function App() {
   const dispatch = useDispatch();
@@ -67,6 +68,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/card/:id" element={<CardDetails />} />
+          <Route
+            path="/create-card"
+            element={
+              <RouteGuard>
+                <CreateCard />
+              </RouteGuard>
+            }
+          />
           <Route
             path="/profile"
             element={

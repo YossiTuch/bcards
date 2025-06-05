@@ -19,7 +19,7 @@ const RouteGuard = (props: RouteGuardProps) => {
   if (isBiz && !user?.isBusiness) {
     return <Navigate to="/" />;
   }
-  
+
   if (isAdmin && !user?.isAdmin) {
     return <Navigate to="/" />;
   }

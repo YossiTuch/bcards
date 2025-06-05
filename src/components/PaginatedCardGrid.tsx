@@ -39,7 +39,7 @@ export const PaginatedCardGrid = ({
           />
         ))}
       </div>
-      <div className="flex overflow-x-auto sm:justify-center">
+      <div className="flex overflow-x-auto pb-5 sm:justify-center">
         <Pagination
           currentPage={currentPage}
           onPageChange={onPageChange}

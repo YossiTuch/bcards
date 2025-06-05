@@ -103,7 +103,7 @@ const Login = () => {
         <div className="flex w-80 items-center">
           <Checkbox
             id="remember"
-            className="border-black rounded-full"
+            className="rounded-full border-black"
             color="blue"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}

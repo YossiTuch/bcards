@@ -7,6 +7,8 @@ import type { TRootState } from "../store/store";
 import { toast } from "react-toastify";
 import { PaginatedCardGrid } from "../components/PaginatedCardGrid";
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
+import { HiPlus } from "react-icons/hi";
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,29 +50,33 @@ const Home = () => {
       const headers = getAuthHeaders();
       if (!headers) return;
 
+      // Find current like status before API call
+      const card = bcards.find((c) => c._id === cardId);
+      if (!card) return;
+      const isLiked = card.likes.includes(user!._id);
+
+      // Make API call
       await axios.patch(
         `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${cardId}`,
         {},
         { headers },
       );
 
+      // Update local state after successful API call
       setBcards((prev) => {
-        const card = prev.find((c) => c._id === cardId);
-        if (!card) return prev;
-
-        const isLiked = card.likes.includes(user!._id);
         const newLikes = isLiked
           ? card.likes.filter((like) => like !== user!._id)
           : [...card.likes, user!._id];
-
-        toast.success(
-          isLiked ? "Card unliked successfully" : "Card liked successfully",
-        );
 
         return prev.map((c) =>
           c._id === cardId ? { ...c, likes: newLikes } : c,
         );
       });
+
+      // Show toast after successful state update
+      toast.success(
+        isLiked ? "Card unliked successfully" : "Card liked successfully",
+      );
     } catch (error) {
       console.error("Error updating like status:", error);
       toast.error("Failed to update like status");
@@ -90,7 +96,7 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
       <div className="mx-10 my-10">
         <h1 className="text-7xl font-semibold max-sm:text-4xl">Cards Page</h1>
         <p className="mt-5 text-4xl max-sm:text-2xl">
@@ -112,6 +118,16 @@ const Home = () => {
           onLikeClick={toggleLike}
           currentUserId={user?._id}
         />
+      )}
+
+      {/* Floating Action Button */}
+      {user?.isBusiness && (
+        <Link
+          to="/create-card"
+          className="fixed right-8 bottom-20 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-all hover:bg-green-600 hover:shadow-xl"
+        >
+          <HiPlus className="text-4xl" />
+        </Link>
       )}
     </div>
   );

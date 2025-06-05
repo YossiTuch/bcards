@@ -30,7 +30,7 @@ const LogoutModal = () => {
             Are you sure you want to log out?
           </h3>
           <div className="flex justify-center gap-4">
-            <Button color="alternative" onClick={handleLogout} >
+            <Button color="alternative" onClick={handleLogout}>
               {"Yes, I'm sure"}
             </Button>
             <Button

@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice";
 import searchSlice from "./searchSlice";
-import modalSlice from './modalSlice';
+import modalSlice from "./modalSlice";
 
 const store = configureStore({
   reducer: { userSlice, searchSlice, modalSlice },

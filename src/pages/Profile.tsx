@@ -23,7 +23,7 @@ const Profile = () => {
     <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
       <Card className="mx-auto max-w-4xl">
         {/* Header with Profile Image */}
-        <div className="relative -mx-6 -mt-6 mb-6 py-5 bg-green-200 dark:bg-slate-700">
+        <div className="relative -mx-6 -mt-6 mb-6 bg-green-200 py-5 dark:bg-slate-700">
           <div className="flex flex-col items-center text-gray-800 dark:text-white">
             <img
               src={user.image?.url || "/profile-image-nav.png"}
