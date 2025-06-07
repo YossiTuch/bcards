@@ -25,7 +25,6 @@ const MyCards = () => {
 
         setCards(response.data);
       } catch (error) {
-        console.error("Error fetching cards:", error);
         toast.error("Failed to load your cards");
       } finally {
         setIsLoading(false);
@@ -55,7 +54,6 @@ const MyCards = () => {
         ),
       );
     } catch (error) {
-      console.error("Error liking card:", error);
       toast.error("Failed to like card");
     }
   };

@@ -66,7 +66,6 @@ const Login = () => {
       navigate("/profile");
     } catch (error) {
       toast.error("Login Failed");
-      console.error("Login Failed..", error);
     }
   };
 

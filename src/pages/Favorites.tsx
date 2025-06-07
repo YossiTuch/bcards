@@ -52,7 +52,6 @@ const Favorites = () => {
       });
       setBcards(likedCards);
     } catch (error) {
-      console.error("Error fetching cards: ", error);
       if (initialLoadDone) {
         toast.error("Failed to load favorite cards");
       }
@@ -79,7 +78,6 @@ const Favorites = () => {
       setBcards((prev) => prev.filter((card) => card._id !== cardId));
       toast.success("Card removed from favorites");
     } catch (error) {
-      console.error("Error updating favorite:", error);
       toast.error("Failed to update favorite status");
     }
   };

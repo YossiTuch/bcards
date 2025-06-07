@@ -129,7 +129,6 @@ const EditCard = () => {
       toast.success("Card updated successfully");
       navigate("/my-cards");
     } catch (error: any) {
-      console.error("Error updating card:", error);
       const errorMessage =
         error.response?.data?.message || "Failed to update card";
       toast.error(errorMessage);

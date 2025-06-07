@@ -91,7 +91,6 @@ const CreateCard = () => {
       reset();
       navigate("/my-cards");
     } catch (error: any) {
-      console.error("Error creating card:", error);
       const errorMessage =
         error.response?.data?.message || "Failed to create card";
       toast.error(errorMessage);

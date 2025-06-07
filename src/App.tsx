@@ -44,7 +44,6 @@ function App() {
 
           dispatch(userActions.login(res.data));
         } catch (error) {
-          console.error("Token validation failed", error);
           localStorage.removeItem("token");
           sessionStorage.removeItem("token");
           delete axios.defaults.headers.common["x-auth-token"];

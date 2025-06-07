@@ -1,4 +1,4 @@
-import { Button, Card, HR } from "flowbite-react";
+import { Card, HR } from "flowbite-react";
 import { FaHeart, FaEdit } from "react-icons/fa";
 import { TCard } from "../types/TCard";
 import { useNavigate } from "react-router-dom";

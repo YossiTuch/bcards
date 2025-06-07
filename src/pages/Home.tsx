@@ -36,7 +36,6 @@ const Home = () => {
       );
       setBcards(response.data);
     } catch (error) {
-      console.error("Error fetching cards:", error);
       toast.error("Failed to load cards");
     } finally {
       setLoading(false);
@@ -78,7 +77,6 @@ const Home = () => {
         isLiked ? "Card unliked successfully" : "Card liked successfully",
       );
     } catch (error) {
-      console.error("Error updating like status:", error);
       toast.error("Failed to update like status");
     }
   };
