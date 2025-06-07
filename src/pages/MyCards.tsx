@@ -97,6 +97,7 @@ const MyCards = () => {
             currentPage={currentPage}
             onPageChange={setCurrentPage}
             onLikeClick={handleLikeClick}
+            showEditButton={true}
           />
         )}
       </div>

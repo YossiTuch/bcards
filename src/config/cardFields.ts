@@ -8,7 +8,13 @@ export const getCardFields = (errors: any) => ({
       error: errors.subtitle,
     },
   ],
-  contact: [
+  info: [
+    {
+      id: "description",
+      label: "Description",
+      path: "description",
+      error: errors.description,
+    },
     {
       id: "phone",
       label: "Phone",
@@ -46,7 +52,7 @@ export const getCardFields = (errors: any) => ({
       error: errors.imageAlt,
     },
   ],
-  address: [
+  location: [
     { id: "country", label: "Country", path: "country", error: errors.country },
     { id: "state", label: "State", path: "state", error: errors.state },
     { id: "city", label: "City", path: "city", error: errors.city },

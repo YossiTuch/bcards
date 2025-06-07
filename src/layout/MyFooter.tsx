@@ -7,7 +7,10 @@ import {
 
 const MyFooter = () => {
   return (
-    <Footer container className="bg-green-200 font-semibold dark:bg-slate-800">
+    <Footer
+      container
+      className="bg-green-200 pt-5 font-semibold dark:bg-slate-800"
+    >
       <FooterCopyright by="Yossi Tuchband" />
       <FooterLinkGroup>
         <FooterLink href="/about">About</FooterLink>

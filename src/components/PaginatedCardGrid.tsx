@@ -9,6 +9,7 @@ interface CardGridProps {
   onPageChange: (page: number) => void;
   onLikeClick: (cardId: string) => void;
   currentUserId?: string;
+  showEditButton?: boolean;
 }
 
 export const PaginatedCardGrid = ({
@@ -18,6 +19,7 @@ export const PaginatedCardGrid = ({
   onPageChange,
   onLikeClick,
   currentUserId,
+  showEditButton,
 }: CardGridProps) => {
   // Calculate pagination
   const indexOfLastCard = currentPage * itemsPerPage;
@@ -36,10 +38,11 @@ export const PaginatedCardGrid = ({
               currentUserId ? bcard.likes.includes(currentUserId) : false
             }
             onLikeClick={onLikeClick}
+            showEditButton={showEditButton}
           />
         ))}
       </div>
-      <div className="flex overflow-x-auto pb-5 sm:justify-center">
+      <div className="flex overflow-x-auto sm:justify-center">
         <Pagination
           currentPage={currentPage}
           onPageChange={onPageChange}

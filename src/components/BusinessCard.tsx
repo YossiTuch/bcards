@@ -1,5 +1,5 @@
-import { Card, HR } from "flowbite-react";
-import { FaHeart } from "react-icons/fa";
+import { Button, Card, HR } from "flowbite-react";
+import { FaHeart, FaEdit } from "react-icons/fa";
 import { TCard } from "../types/TCard";
 import { useNavigate } from "react-router-dom";
 
@@ -7,12 +7,14 @@ interface BusinessCardProps {
   bcard: TCard;
   isLiked?: boolean;
   onLikeClick: (cardId: string) => void;
+  showEditButton?: boolean;
 }
 
 export const BusinessCard = ({
   bcard,
   isLiked,
   onLikeClick,
+  showEditButton = false,
 }: BusinessCardProps) => {
   const navigate = useNavigate();
 
@@ -45,20 +47,31 @@ export const BusinessCard = ({
         </div>
         <HR />
         <div
-          className="flex justify-center gap-2"
+          className="flex items-center justify-between gap-2"
           onClick={(e) => e.stopPropagation()}
         >
-          <FaHeart
-            onClick={() => onLikeClick(bcard._id)}
-            className={`cursor-pointer text-2xl ${
-              isLiked
-                ? "text-red-500 hover:text-red-300"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          />
-          <span>
-            {bcard.likes.length} {bcard.likes.length === 1 ? "like" : "likes"}
-          </span>
+          <div className="flex items-center gap-2">
+            <FaHeart
+              onClick={() => onLikeClick(bcard._id)}
+              className={`cursor-pointer text-2xl ${
+                isLiked
+                  ? "text-red-500 hover:text-red-300"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            />
+            <span>
+              {bcard.likes.length} {bcard.likes.length === 1 ? "like" : "likes"}
+            </span>
+          </div>
+          {showEditButton && (
+            <FaEdit
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/edit-card/${bcard._id}`);
+              }}
+              className="cursor-pointer text-xl text-gray-500 hover:text-gray-700"
+            />
+          )}
         </div>
       </Card>
     </div>

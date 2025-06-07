@@ -18,6 +18,8 @@ import { jwtDecode } from "jwt-decode";
 import type { TToken } from "./types/TToken";
 import MyFooter from "./layout/MyFooter";
 import LogoutModal from "./components/LogoutModal";
+
+import EditCard from "./pages/EditCard";
 import CreateCard from "./pages/CreateCard";
 
 function App() {
@@ -89,6 +91,14 @@ function App() {
             element={
               <RouteGuard>
                 <MyCards />
+              </RouteGuard>
+            }
+          />
+          <Route
+            path="/edit-card/:id"
+            element={
+              <RouteGuard>
+                <EditCard />
               </RouteGuard>
             }
           />

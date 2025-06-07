@@ -1,13 +1,13 @@
+import { useEffect, useState } from "react";
 import { Button, Card, Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import { TCard } from "../types/TCard";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { CreateCardSchema } from "../validations/createCard.joi";
-import { useState, useEffect } from "react";
 import { FormField } from "../components/FormField";
 import { getCardFields } from "../config/cardFields";
 
@@ -28,8 +28,9 @@ type FormData = {
   zip: string;
 };
 
-const CreateCard = () => {
+const EditCard = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const { getAuthHeaders } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -40,10 +41,48 @@ const CreateCard = () => {
     formState: { errors, isValid },
     watch,
     reset,
+    setValue,
   } = useForm<FormData>({
     mode: "onChange",
     resolver: joiResolver(CreateCardSchema),
   });
+
+  useEffect(() => {
+    const fetchCard = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get<TCard>(
+          `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`,
+        );
+        const card = response.data;
+
+        // Set form values
+        setValue("title", card.title);
+        setValue("subtitle", card.subtitle);
+        setValue("description", card.description);
+        setValue("phone", card.phone);
+        setValue("email", card.email);
+        setValue("web", card.web);
+        setValue("imageUrl", card.image.url);
+        setValue("imageAlt", card.image.alt);
+        setValue("state", card.address.state);
+        setValue("country", card.address.country);
+        setValue("city", card.address.city);
+        setValue("street", card.address.street);
+        setValue("houseNumber", card.address.houseNumber.toString());
+        setValue("zip", card.address.zip.toString());
+
+        setImagePreview(card.image.url);
+      } catch (error) {
+        toast.error("Failed to load card details");
+        navigate("/my-cards");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCard();
+  }, [id, setValue, navigate]);
 
   const imageUrl = watch("imageUrl");
   useEffect(() => setImagePreview(imageUrl || ""), [imageUrl]);
@@ -81,19 +120,18 @@ const CreateCard = () => {
         },
       };
 
-      await axios.post<TCard>(
-        "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards",
+      await axios.put<TCard>(
+        `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`,
         cardData,
         { headers },
       );
 
-      toast.success("Card created successfully");
-      reset();
+      toast.success("Card updated successfully");
       navigate("/my-cards");
     } catch (error: any) {
-      console.error("Error creating card:", error);
+      console.error("Error updating card:", error);
       const errorMessage =
-        error.response?.data?.message || "Failed to create card";
+        error.response?.data?.message || "Failed to update card";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -108,14 +146,22 @@ const CreateCard = () => {
     </div>
   );
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
       <Card className="mx-auto max-w-4xl">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
           <div className="text-center">
-            <h1 className="text-4xl font-bold">Create New Business Card</h1>
+            <h1 className="text-4xl font-bold">Edit Business Card</h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Fill in the details for your business card
+              Update your business card details
             </p>
           </div>
 
@@ -152,7 +198,7 @@ const CreateCard = () => {
               {renderSection(fields.location)}
             </section>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-4">
               <Button
                 type="submit"
                 disabled={!isValid || isLoading}
@@ -162,11 +208,18 @@ const CreateCard = () => {
                 {isLoading ? (
                   <>
                     <Spinner size="sm" className="mr-3" />
-                    Creating...
+                    Updating...
                   </>
                 ) : (
-                  "Create Card"
+                  "Update Card"
                 )}
+              </Button>
+              <Button
+                color="gray"
+                onClick={() => navigate("/my-cards")}
+                size="lg"
+              >
+                Cancel
               </Button>
             </div>
           </div>
@@ -176,4 +229,4 @@ const CreateCard = () => {
   );
 };
 
-export default CreateCard;
+export default EditCard;
