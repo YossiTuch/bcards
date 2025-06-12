@@ -21,14 +21,16 @@ const Header = () => {
     to,
     children,
     onClick,
+    className,
   }: {
     to: string;
     children: React.ReactNode;
+    className?: string;
     onClick?: () => void;
   }) => (
     <Link
       to={to}
-      className="text-lg hover:text-green-700 dark:hover:text-green-400"
+      className={`text-lg hover:text-green-700 dark:hover:text-green-400 ${className}`}
       onClick={onClick}
     >
       {children}
@@ -38,13 +40,11 @@ const Header = () => {
   return (
     <div>
       <Navbar fluid className="bg-green-200 shadow-md dark:bg-slate-700">
-        <NavbarBrand className="flex items-center gap-2">
-          <HeaderNavLink to="/home">
-            <span className="text-xl font-bold whitespace-nowrap hover:text-green-700 dark:hover:text-green-400">
-              My Business Cards
-            </span>
-          </HeaderNavLink>
-        </NavbarBrand>
+        <HeaderNavLink to="/home" className="flex items-center gap-2">
+          <span className="text-xl font-bold whitespace-nowrap hover:text-green-700 dark:hover:text-green-400">
+            My Business Cards
+          </span>
+        </HeaderNavLink>
 
         <NavbarCollapse className="font-semibold max-md:order-2">
           <div className="flex items-center gap-6 max-md:flex-col">
