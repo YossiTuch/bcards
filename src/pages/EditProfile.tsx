@@ -32,7 +32,7 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
   const { user, getAuthHeaders } = useAuth();
-    const {
+  const {
     register,
     handleSubmit,
     watch,
@@ -47,7 +47,7 @@ const EditProfile = () => {
     if (!user) {
       navigate("/");
       return;
-    }    // Reset form with all user data at once
+    } // Reset form with all user data at once
     reset({
       name: {
         first: user.name.first || "",
@@ -97,22 +97,24 @@ const EditProfile = () => {
           city: data.address.city,
           street: data.address.street,
           houseNumber: parseInt(data.address.houseNumber),
-          zip: parseInt(data.address.zip)
-        }
+          zip: parseInt(data.address.zip),
+        },
       };
 
       const response = await axios.put(
         `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${user?._id}`,
         updateData,
-        { headers }
+        { headers },
       );
 
       dispatch(userActions.updateUser(response.data));
       toast.success("Profile updated successfully!");
       navigate("/profile");
     } catch (error: any) {
-      console.error('Update error:', error.response?.data || error);
-      toast.error(error.response?.data?.message || "Update failed. Please try again.");
+      console.error("Update error:", error.response?.data || error);
+      toast.error(
+        error.response?.data?.message || "Update failed. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }

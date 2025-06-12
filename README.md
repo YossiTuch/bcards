@@ -1,54 +1,117 @@
-# React + TypeScript + Vite
+# BCards - Digital Business Card Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for creating, managing, and sharing digital business cards. Built with React, TypeScript, and modern web technologies.
 
-Currently, two official plugins are available:
+![BCards Logo](./public/b-Icon.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- **User Authentication**
+  - Secure login and registration
+  - JWT-based authentication
+  - Remember me functionality
+  - Protected routes for authenticated users
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Card Management**
+  - Create and customize digital business cards
+  - Edit existing cards
+  - View detailed card information
+  - Delete cards
+  - Search functionality
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+- **User Profiles**
+  - Personal profile management
+  - Business account options
+  - Profile image customization
+  - Contact information management
+
+- **Additional Features**
+  - Dark/Light mode toggle
+  - Responsive design
+  - Favorites system
+  - Search functionality
+  - Pagination for card lists
+
+## 🛠️ Technologies
+
+- **Frontend Framework**: React with TypeScript
+- **State Management**: Redux Toolkit
+- **Routing**: React Router v6
+- **UI Components**: Flowbite React
+- **Styling**: TailwindCSS
+- **Form Handling**: React Hook Form
+- **Validation**: Joi
+- **HTTP Client**: Axios
+- **Authentication**: JWT
+- **Build Tool**: Vite
+- **Icons**: React Icons
+
+## 💻 Installation
+
+1. Clone the repository:
+```bash
+git clone [repository-url]
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
+2. Install dependencies:
+```bash
+npm install
 ```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+## 🌐 Environment Setup
+
+Make sure to set up your environment variables if required (e.g., API endpoints, authentication keys).
+
+## 📌 Project Structure
+
+```
+src/
+├── components/    # Reusable UI components
+├── config/        # Configuration files
+├── hooks/         # Custom React hooks
+├── layout/        # Layout components
+├── pages/         # Page components
+├── store/         # Redux store setup
+├── types/         # TypeScript type definitions
+├── validations/   # Form validation schemas
+└── App.tsx        # Main application component
+```
+
+## 🔐 Authentication
+
+The application uses JWT (JSON Web Tokens) for authentication. Tokens can be stored in either:
+- LocalStorage (Remember me enabled)
+- SessionStorage (Remember me disabled)
+
+## 👥 User Types
+
+- **Regular Users**: Can view and favorite cards
+- **Business Users**: Can create and manage their own cards
+- **Admin Users**: Additional administrative privileges
+
+## 🎨 Customization
+
+- Supports both light and dark themes
+- Customizable card layouts
+- Flexible form fields for cards and profiles
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+Created by Yossi Tuchband
+
+---
+
+For more information about the application architecture, components, or contribution guidelines, please reach out to the project maintainers.
