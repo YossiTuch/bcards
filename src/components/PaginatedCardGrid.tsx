@@ -41,12 +41,15 @@ export const PaginatedCardGrid = ({
           />
         ))}
       </div>
-      <div className="flex overflow-x-auto sm:justify-center">
+      <div className="flex w-full justify-center px-2 py-4">
         <Pagination
           currentPage={currentPage}
           onPageChange={onPageChange}
           showIcons={true}
           totalPages={totalPages}
+          previousLabel=""
+          nextLabel=""
+          className="flex justify-center text-sm"
         />
       </div>
     </>
