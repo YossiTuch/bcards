@@ -20,7 +20,7 @@ const Header = () => {
   const { user, isAuthenticated } = useAuth();
 
   return (
-    <div className="sticky top-0 z-50">
+    <div>
       <Navbar fluid className="bg-green-200 shadow-md dark:bg-slate-700">
         {/* Logo Section */}
         <NavbarBrand as={Link} to="/home" className="flex items-center gap-2">

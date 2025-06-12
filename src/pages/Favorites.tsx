@@ -114,6 +114,7 @@ const Favorites = () => {
           onPageChange={setCurrentPage}
           onLikeClick={toggleLike}
           currentUserId={user?._id}
+          showEditButton={true}
         />
       )}
     </div>

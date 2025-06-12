@@ -2,6 +2,7 @@ import { Card, HR } from "flowbite-react";
 import { FaHeart, FaEdit } from "react-icons/fa";
 import { TCard } from "../types/TCard";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 interface BusinessCardProps {
   bcard: TCard;
@@ -17,6 +18,7 @@ export const BusinessCard = ({
   showEditButton = false,
 }: BusinessCardProps) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <div className="m-5 mx-auto mt-10 max-sm:w-[90%] lg:w-96">
@@ -63,7 +65,7 @@ export const BusinessCard = ({
               {bcard.likes.length} {bcard.likes.length === 1 ? "like" : "likes"}
             </span>
           </div>
-          {showEditButton && (
+          {user && bcard.user_id === user._id && (
             <FaEdit
               onClick={(e) => {
                 e.stopPropagation();

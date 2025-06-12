@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Spinner } from "flowbite-react";
+import { Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,8 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { TCard } from "../types/TCard";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { CreateCardSchema } from "../validations/createCard.joi";
-import { FormField } from "../components/FormField";
-import { getCardFields } from "../config/cardFields";
+import { CardForm } from "../components/CardForm";
 
 type FormData = {
   title: string;
@@ -40,7 +39,6 @@ const EditCard = () => {
     handleSubmit,
     formState: { errors, isValid },
     watch,
-    reset,
     setValue,
   } = useForm<FormData>({
     mode: "onChange",
@@ -55,22 +53,22 @@ const EditCard = () => {
           `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`,
         );
         const card = response.data;
-
-        // Set form values
-        setValue("title", card.title);
-        setValue("subtitle", card.subtitle);
-        setValue("description", card.description);
-        setValue("phone", card.phone);
-        setValue("email", card.email);
-        setValue("web", card.web);
-        setValue("imageUrl", card.image.url);
-        setValue("imageAlt", card.image.alt);
-        setValue("state", card.address.state);
-        setValue("country", card.address.country);
-        setValue("city", card.address.city);
-        setValue("street", card.address.street);
-        setValue("houseNumber", card.address.houseNumber.toString());
-        setValue("zip", card.address.zip.toString());
+        Object.entries({
+          title: card.title,
+          subtitle: card.subtitle,
+          description: card.description,
+          phone: card.phone,
+          email: card.email,
+          web: card.web,
+          imageUrl: card.image.url,
+          imageAlt: card.image.alt,
+          state: card.address.state,
+          country: card.address.country,
+          city: card.address.city,
+          street: card.address.street,
+          houseNumber: card.address.houseNumber.toString(),
+          zip: card.address.zip.toString(),
+        }).forEach(([key, value]) => setValue(key as keyof FormData, value));
 
         setImagePreview(card.image.url);
       } catch (error) {
@@ -84,10 +82,10 @@ const EditCard = () => {
     fetchCard();
   }, [id, setValue, navigate]);
 
-  const imageUrl = watch("imageUrl");
-  useEffect(() => setImagePreview(imageUrl || ""), [imageUrl]);
-
-  const fields = getCardFields(errors);
+  useEffect(() => {
+    const imageUrl = watch("imageUrl");
+    setImagePreview(imageUrl || "");
+  }, [watch("imageUrl")]);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -98,52 +96,29 @@ const EditCard = () => {
         return;
       }
 
-      // Transform the data to match the API structure
-      const cardData = {
-        title: data.title,
-        subtitle: data.subtitle,
-        description: data.description,
-        phone: data.phone,
-        email: data.email,
-        web: data.web || "",
-        image: {
-          url: data.imageUrl,
-          alt: data.imageAlt,
-        },
-        address: {
-          state: data.state,
-          country: data.country,
-          city: data.city,
-          street: data.street,
-          houseNumber: data.houseNumber,
-          zip: Number(data.zip),
-        },
-      };
-
       await axios.put<TCard>(
         `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`,
-        cardData,
+        {
+          ...data,
+          web: data.web || "",
+          image: { url: data.imageUrl, alt: data.imageAlt },
+          address: {
+            ...data,
+            houseNumber: data.houseNumber,
+            zip: Number(data.zip),
+          },
+        },
         { headers },
       );
 
       toast.success("Card updated successfully");
       navigate("/my-cards");
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to update card";
-      toast.error(errorMessage);
+      toast.error(error.response?.data?.message || "Failed to update card");
     } finally {
       setIsLoading(false);
     }
   };
-
-  const renderSection = (fields: any[], columns = 2) => (
-    <div className={`grid gap-x-8 gap-y-6 md:grid-cols-${columns}`}>
-      {fields.map((field) => (
-        <FormField key={field.id} register={register} {...field} />
-      ))}
-    </div>
-  );
 
   if (isLoading) {
     return (
@@ -152,79 +127,21 @@ const EditCard = () => {
       </div>
     );
   }
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
-      <Card className="mx-auto max-w-4xl">
-        <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold">Edit Business Card</h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Update your business card details
-            </p>
-          </div>
-
-          <div className="space-y-8">
-            <section>
-              <h2 className="mb-4 text-xl font-semibold">Card Information</h2>
-              {renderSection(fields.cardDetails)}
-              {renderSection(fields.info)}
-            </section>
-
-            <section>
-              <h2 className="mb-4 text-xl font-semibold">Image</h2>
-              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
-                {fields.image.map((field) => (
-                  <div key={field.id}>
-                    <FormField register={register} {...field} />
-                  </div>
-                ))}
-                {imagePreview && (
-                  <div className="col-span-2 mt-4 flex justify-center rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="h-40 w-auto object-contain"
-                      onError={() => setImagePreview("")}
-                    />
-                  </div>
-                )}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-4 text-xl font-semibold">Location</h2>
-              {renderSection(fields.location)}
-            </section>
-
-            <div className="flex justify-center gap-4">
-              <Button
-                type="submit"
-                disabled={!isValid || isLoading}
-                className="w-44"
-                size="lg"
-              >
-                {isLoading ? (
-                  <>
-                    <Spinner size="sm" className="mr-3" />
-                    Updating...
-                  </>
-                ) : (
-                  "Update Card"
-                )}
-              </Button>
-              <Button
-                color="gray"
-                onClick={() => navigate("/my-cards")}
-                size="lg"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </form>
-      </Card>
-    </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <CardForm
+        title="Edit Business Card"
+        subtitle="Update your business card details"
+        register={register}
+        errors={errors}
+        isValid={isValid}
+        isLoading={isLoading}
+        imagePreview={imagePreview}
+        setImagePreview={setImagePreview}
+        onCancel={() => navigate("/my-cards")}
+        submitText="Update Card"
+      />
+    </form>
   );
 };
 

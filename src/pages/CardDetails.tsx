@@ -3,21 +3,16 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { TCard } from "../types/TCard";
 import { Button, Card, Spinner } from "flowbite-react";
-import {
-  FaHeart,
-  FaEnvelope,
-  FaPhone,
-  FaGlobe,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaHeart, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
+import { CardHeader } from "../components/CardHeader";
+import { CardInfoSection } from "../components/CardInfoSection";
 
 const CardDetails = () => {
   const [card, setCard] = useState<TCard | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, requireAuth, getAuthHeaders } = useAuth();
@@ -26,45 +21,27 @@ const CardDetails = () => {
     const fetchCardDetails = async () => {
       try {
         setIsLoading(true);
-        setError(null);
-
         const response = await axios.get(
           `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`,
         );
-
-        if (!response.data) {
-          setError("Card not found");
-          return;
-        }
-
-        setCard(response.data);
+        setCard(response.data || null);
       } catch (error: any) {
-        const errorMessage =
+        setError(
           error.response?.status === 404
             ? "Card not found"
-            : error.response?.data?.message ||
-              error.message ||
-              "Failed to load card details";
-
-        setError(`Error loading card: ${errorMessage}`);
+            : "Failed to load card details",
+        );
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (id) {
-      fetchCardDetails();
-    } else {
-      setError("No card ID provided");
-      setIsLoading(false);
-    }
+    id ? fetchCardDetails() : setError("No card ID provided");
   }, [id]);
 
   const likeOrUnlikeCard = async () => {
     try {
-      if (!card) return;
-      if (!requireAuth("Please login to like cards")) return;
-
+      if (!card || !requireAuth("Please login to like cards")) return;
       const headers = getAuthHeaders();
       if (!headers) return;
 
@@ -75,11 +52,14 @@ const CardDetails = () => {
       );
 
       const isLiked = card.likes.includes(user!._id);
-      setCard({
-        ...card,
-        likes: isLiked
-          ? card.likes.filter((like) => like !== user!._id)
-          : [...card.likes, user!._id],
+      setCard((prev) => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          likes: isLiked
+            ? prev.likes.filter((like) => like !== user!._id)
+            : [...prev.likes, user!._id],
+        };
       });
 
       toast.success(
@@ -110,78 +90,12 @@ const CardDetails = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
       <Card className="mx-auto max-w-4xl">
-        {" "}
-        {/* Header Image */}
-        <div className="relative -mx-6 -mt-6 mb-6">
-          <img
-            className="max-h-[600px] w-full bg-gray-100 object-contain dark:bg-gray-700"
-            src={card.image.url}
-            alt={card.image.alt}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-full p-6 text-white">
-            <h1 className="text-shadow text-3xl font-bold">{card.title}</h1>
-            <p className="text-shadow mt-2 text-xl">{card.subtitle}</p>
-          </div>
-        </div>
-        {/* Description */}
+        <CardHeader card={card} />
         <h2 className="mb-3 text-xl font-semibold">About</h2>
         <p className="mb-6 text-gray-600 dark:text-gray-300">
           {card.description}
         </p>
-        {/* Contact Information */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <h2 className="mb-3 text-xl font-semibold">Contact Information</h2>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <FaEnvelope className="text-gray-500" />
-                <a
-                  href={`mailto:${card.email}`}
-                  className="hover:text-blue-500"
-                >
-                  {card.email}
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaPhone className="text-gray-500" />
-                <a href={`tel:${card.phone}`} className="hover:text-blue-500">
-                  {card.phone}
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaGlobe className="text-gray-500" />
-                <a
-                  href={card.web}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-blue-500"
-                >
-                  {card.web}
-                </a>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <h2 className="mb-3 text-xl font-semibold">Location</h2>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <FaMapMarkerAlt className="text-gray-500" />
-                <span>
-                  {card.address.street} {card.address.houseNumber}
-                </span>
-              </div>
-              <div className="ml-7">
-                <p>
-                  {card.address.city}, {card.address.state} {card.address.zip}
-                </p>
-                <p>{card.address.country}</p>
-              </div>
-            </div>
-          </Card>
-        </div>
-        {/* Action Buttons */}
+        <CardInfoSection card={card} />
         <div className="mt-6 flex items-center justify-between border-t pt-6">
           <div className="flex items-center gap-2">
             <FaHeart
@@ -196,6 +110,12 @@ const CardDetails = () => {
               {card.likes.length} {card.likes.length === 1 ? "like" : "likes"}
             </span>
           </div>
+          {user && card.user_id === user._id && (
+            <FaEdit
+              onClick={() => navigate(`/edit-card/${card._id}`)}
+              className="cursor-pointer text-2xl text-gray-500 hover:text-gray-700"
+            />
+          )}
           <Button color="gray" onClick={() => navigate(-1)}>
             Go Back
           </Button>
