@@ -15,11 +15,12 @@ const userSlice = createSlice({
     },
     logout: (state: typeof initialState) => {
       state.user = null;
-      // Clear both storage locations
       localStorage.removeItem("token");
       sessionStorage.removeItem("token");
-      // Clear the axios header
       delete axios.defaults.headers.common["x-auth-token"];
+    },
+    updateUser: (state: typeof initialState, data: PayloadAction<TUser>) => {
+      state.user = data.payload;
     },
   },
 });

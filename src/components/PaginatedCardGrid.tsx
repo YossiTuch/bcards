@@ -21,7 +21,6 @@ export const PaginatedCardGrid = ({
   currentUserId,
   showEditButton,
 }: CardGridProps) => {
-  // Calculate pagination
   const indexOfLastCard = currentPage * itemsPerPage;
   const indexOfFirstCard = indexOfLastCard - itemsPerPage;
   const currentCards = cards.slice(indexOfFirstCard, indexOfLastCard);

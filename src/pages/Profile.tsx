@@ -1,15 +1,16 @@
-import { Card } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 import {
   FaEnvelope,
   FaPhone,
   FaMapMarkerAlt,
   FaUserTag,
   FaBriefcase,
+  FaEdit,
 } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
-  // const user = useSelector((state: TRootState) => state.userSlice.user);
   const { user } = useAuth();
   if (!user) {
     return (
@@ -22,7 +23,6 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
       <Card className="mx-auto max-w-4xl">
-        {/* Header with Profile Image */}
         <div className="relative -mx-6 -mt-6 mb-6 bg-green-200 py-5 dark:bg-slate-700">
           <div className="flex flex-col items-center text-gray-800 dark:text-white">
             <img
@@ -38,6 +38,13 @@ const Profile = () => {
                 Admin
               </span>
             )}
+            {/* Edit Profile Button */}
+            <Link to="/edit-profile" className="mt-4">
+              <Button size="sm" className="flex items-center gap-2">
+                <FaEdit />
+                Edit Profile
+              </Button>
+            </Link>
           </div>
         </div>
 

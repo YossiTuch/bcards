@@ -45,7 +45,6 @@ const Login = () => {
         data,
       );
 
-      // Store token based on remember me preference
       if (rememberMe) {
         localStorage.setItem("token", token.data);
       } else {

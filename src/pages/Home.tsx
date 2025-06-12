@@ -49,7 +49,6 @@ const Home = () => {
       const headers = getAuthHeaders();
       if (!headers) return;
 
-      // Find current like status before API call
       const card = bcards.find((c) => c._id === cardId);
       if (!card) return;
       const isLiked = card.likes.includes(user!._id);
@@ -61,7 +60,6 @@ const Home = () => {
         { headers },
       );
 
-      // Update local state after successful API call
       setBcards((prev) => {
         const newLikes = isLiked
           ? card.likes.filter((like) => like !== user!._id)
@@ -72,7 +70,6 @@ const Home = () => {
         );
       });
 
-      // Show toast after successful state update
       toast.success(
         isLiked ? "Card unliked successfully" : "Card liked successfully",
       );
@@ -119,7 +116,6 @@ const Home = () => {
         />
       )}
 
-      {/* Floating Action Button */}
       {user?.isBusiness && (
         <Link
           to="/create-card"

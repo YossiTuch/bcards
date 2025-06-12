@@ -21,12 +21,10 @@ const MyFooter = () => {
     <Footer container className="mt-5 bg-green-200 py-5 dark:bg-slate-800">
       <div className="w-full">
         <div className="flex items-center justify-between">
-          {/* Copyright Section */}
           <span className="text-sm text-gray-500 dark:text-gray-400">
             © {new Date().getFullYear()} My Business Cards™ by Yossi Tuchband
           </span>
 
-          {/* Main Navigation */}
           <FooterLinkGroup className="flex gap-10 font-semibold">
             <FooterNavLink to="/home">Home</FooterNavLink>
             {isAuthenticated && user && (

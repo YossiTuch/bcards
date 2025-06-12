@@ -7,6 +7,8 @@ import { Spinner } from "flowbite-react";
 import { toast } from "react-toastify";
 import { PaginatedCardGrid } from "../components/PaginatedCardGrid";
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
+import { HiPlus } from "react-icons/hi";
 
 const Favorites = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,7 +34,6 @@ const Favorites = () => {
     try {
       setLoading(true);
 
-      // Skip the requireAuth toast on initial load
       if (!initialLoadDone) {
         if (!isAuthenticated) return;
       } else {
@@ -74,7 +75,7 @@ const Favorites = () => {
         { headers },
       );
 
-      // Remove the card from favorites immediately
+
       setBcards((prev) => prev.filter((card) => card._id !== cardId));
       toast.success("Card removed from favorites");
     } catch (error) {
@@ -84,7 +85,7 @@ const Favorites = () => {
 
   useEffect(() => {
     getLikedCards();
-  }, [user, isAuthenticated]); // Reload when user or auth status changes
+  }, [user, isAuthenticated]); 
 
   if (loading) {
     return (
@@ -95,27 +96,38 @@ const Favorites = () => {
   }
 
   return (
-    <div className="mx-10 my-10 min-h-screen">
-      <h1 className="text-7xl font-semibold max-sm:text-4xl">Favorite Cards</h1>
-      <p className="mt-5 text-4xl max-sm:text-2xl">
-        Here you can find your favorite business cards
-      </p>
-      <hr className="mx-auto mt-10 max-w-[90%] border-1 border-gray-300" />
+    <div className="relative min-h-screen">
+      <div className="mx-10 my-10">
+        <h1 className="text-7xl font-semibold max-sm:text-4xl">Favorite Cards</h1>
+        <p className="mt-5 text-4xl max-sm:text-2xl">
+          Here you can find your favorite business cards
+        </p>
+        <hr className="mx-auto mt-10 max-w-[90%] border-1 border-gray-300" />
 
-      {bcards.length === 0 ? (
-        <div className="mt-10 text-center text-xl text-gray-500">
-          No favorite cards yet. Browse the home page to add some!
-        </div>
-      ) : (
-        <PaginatedCardGrid
-          cards={filterBySearch()}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-          onLikeClick={toggleLike}
-          currentUserId={user?._id}
-          showEditButton={true}
-        />
+        {bcards.length === 0 ? (
+          <div className="mt-10 text-center text-xl text-gray-500">
+            No favorite cards yet. Browse the home page to add some!
+          </div>
+        ) : (
+          <PaginatedCardGrid
+            cards={filterBySearch()}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onLikeClick={toggleLike}
+            currentUserId={user?._id}
+            showEditButton={true}
+          />
+        )}
+      </div>
+
+      {user?.isBusiness && (
+        <Link
+          to="/create-card"
+          className="fixed right-8 bottom-20 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-all hover:bg-green-600 hover:shadow-xl"
+        >
+          <HiPlus className="text-4xl" />
+        </Link>
       )}
     </div>
   );

@@ -8,17 +8,14 @@ export const DarkModeButton = () => {
   });
 
   useEffect(() => {
-    // Update theme in localStorage and DOM
     const updateTheme = (dark: boolean) => {
       const theme = dark ? "dark" : "light";
       localStorage.setItem("flowbite-theme-mode", theme);
       document.documentElement.classList.toggle("dark", dark);
     };
 
-    // Initial theme setup
     updateTheme(isDark);
 
-    // Listen for system theme changes
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
       setIsDark(e.matches);

@@ -6,6 +6,7 @@ import Error from "./pages/Error";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 import RouteGuard from "./components/RouteGuard";
 import MyCards from "./pages/MyCards";
 import Favorites from "./pages/Favorites";
@@ -28,7 +29,6 @@ function App() {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      // Check both storages for token
       const token =
         localStorage.getItem("token") || sessionStorage.getItem("token");
 
@@ -61,7 +61,6 @@ function App() {
         <Header />
         <LogoutModal />
 
-        {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -69,6 +68,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/card/:id" element={<CardDetails />} />
+          <Route
+            path="/edit-profile"
+            element={
+              <RouteGuard>
+                <EditProfile />
+              </RouteGuard>
+            }
+          />
           <Route
             path="/create-card"
             element={

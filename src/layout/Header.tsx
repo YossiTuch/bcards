@@ -21,17 +21,14 @@ const Header = () => {
   return (
     <div>
       <Navbar fluid className="bg-green-200 shadow-md dark:bg-slate-700">
-        {/* Logo Section */}
         <NavbarBrand as={Link} to="/home" className="flex items-center gap-2">
           <span className="text-xl font-bold whitespace-nowrap hover:text-green-700 dark:hover:text-green-400">
             My Business Cards
           </span>
         </NavbarBrand>
 
-        {/* Main Navigation */}
         <NavbarCollapse className="font-semibold max-md:order-2">
           <div className="flex items-center gap-6 max-md:flex-col">
-            {/* User Navigation Links */}
             <div className="flex items-center gap-6 max-md:flex-col">
               {isAuthenticated && user && (
                 <>
@@ -54,7 +51,6 @@ const Header = () => {
                 </>
               )}
 
-              {/* Search Bar */}
               <div className="min-w-[200px]">
                 <TextInput
                   onChange={(e) =>
@@ -67,7 +63,6 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Auth Links */}
             <div className="flex items-center gap-6 max-md:flex-col">
               {!isAuthenticated ? (
                 <>
@@ -116,7 +111,6 @@ const Header = () => {
           </div>
         </NavbarCollapse>
 
-        {/* Theme Toggle & Mobile Menu */}
         <div className="flex items-center gap-2">
           <DarkModeButton />
           <NavbarToggle />
