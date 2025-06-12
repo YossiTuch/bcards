@@ -2,7 +2,6 @@ import {
   Navbar,
   NavbarBrand,
   NavbarCollapse,
-  NavbarLink,
   NavbarToggle,
   TextInput,
 } from "flowbite-react";
@@ -18,6 +17,20 @@ const Header = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useAuth();
 
+  const HeaderNavLink = ({
+    to,
+    children,
+    onClick,
+  }: {
+    to: string;
+    children: React.ReactNode;
+    onClick?: () => void;
+  }) => (
+    <Link to={to} className="text-lg hover:text-green-700 dark:hover:text-green-400" onClick={onClick}>
+      {children}
+    </Link>
+  );
+
   return (
     <div>
       <Navbar fluid className="bg-green-200 shadow-md dark:bg-slate-700">
@@ -32,21 +45,13 @@ const Header = () => {
             <div className="flex items-center gap-6 max-md:flex-col">
               {isAuthenticated && user && (
                 <>
-                  <NavbarLink
-                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
-                    as={Link}
-                    to="/favorites"
-                  >
+                  <HeaderNavLink to="/favorites">
                     Favorites
-                  </NavbarLink>
+                  </HeaderNavLink>
                   {user.isBusiness && (
-                    <NavbarLink
-                      as={Link}
-                      to="/my-cards"
-                      className="text-lg hover:text-green-700 dark:hover:text-green-400"
-                    >
+                    <HeaderNavLink to="/my-cards">
                       My Cards
-                    </NavbarLink>
+                    </HeaderNavLink>
                   )}
                 </>
               )}
@@ -66,47 +71,27 @@ const Header = () => {
             <div className="flex items-center gap-6 max-md:flex-col">
               {!isAuthenticated ? (
                 <>
-                  <NavbarLink
-                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
-                    as={Link}
-                    to="/login"
-                  >
+                  <HeaderNavLink to="/login">
                     Sign In
-                  </NavbarLink>
-                  <NavbarLink
-                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
-                    as={Link}
-                    to="/register"
-                  >
+                  </HeaderNavLink>
+                  <HeaderNavLink to="/register">
                     Register
-                  </NavbarLink>
+                  </HeaderNavLink>
                 </>
               ) : (
                 <>
-                  <NavbarLink
-                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
-                    as={Link}
-                    to="/profile"
-                  >
+                  <HeaderNavLink to="/profile">
                     Profile
-                  </NavbarLink>
-                  <NavbarLink
-                    className="text-lg hover:text-green-700 dark:hover:text-green-400"
-                    as={Link}
-                    onClick={() => dispatch(ModalActions.openModal())}
-                  >
+                  </HeaderNavLink>
+                  <HeaderNavLink to="#" onClick={() => dispatch(ModalActions.openModal())}>
                     Logout
-                  </NavbarLink>
+                  </HeaderNavLink>
                 </>
               )}
 
-              <NavbarLink
-                as={Link}
-                to="/about"
-                className="text-lg hover:text-green-700 dark:hover:text-green-400"
-              >
+              <HeaderNavLink to="/about">
                 About
-              </NavbarLink>
+              </HeaderNavLink>
             </div>
           </div>
         </NavbarCollapse>
