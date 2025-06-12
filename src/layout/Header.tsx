@@ -1,6 +1,5 @@
 import {
   Navbar,
-  NavbarBrand,
   NavbarCollapse,
   NavbarToggle,
   TextInput,
