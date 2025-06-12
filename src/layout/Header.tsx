@@ -13,7 +13,6 @@ import { IoSearchSharp } from "react-icons/io5";
 import { searchActions } from "../store/searchSlice";
 import { ModalActions } from "../store/modalSlice";
 import { useAuth } from "../hooks/useAuth";
-import { useState } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();

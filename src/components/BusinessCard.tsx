@@ -15,7 +15,6 @@ export const BusinessCard = ({
   bcard,
   isLiked,
   onLikeClick,
-  showEditButton = false,
 }: BusinessCardProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
