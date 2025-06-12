@@ -26,7 +26,11 @@ const Header = () => {
     children: React.ReactNode;
     onClick?: () => void;
   }) => (
-    <Link to={to} className="text-lg hover:text-green-700 dark:hover:text-green-400" onClick={onClick}>
+    <Link
+      to={to}
+      className="text-lg hover:text-green-700 dark:hover:text-green-400"
+      onClick={onClick}
+    >
       {children}
     </Link>
   );
@@ -34,10 +38,12 @@ const Header = () => {
   return (
     <div>
       <Navbar fluid className="bg-green-200 shadow-md dark:bg-slate-700">
-        <NavbarBrand as={Link} to="/home" className="flex items-center gap-2">
-          <span className="text-xl font-bold whitespace-nowrap hover:text-green-700 dark:hover:text-green-400">
-            My Business Cards
-          </span>
+        <NavbarBrand className="flex items-center gap-2">
+          <HeaderNavLink to="/home">
+            <span className="text-xl font-bold whitespace-nowrap hover:text-green-700 dark:hover:text-green-400">
+              My Business Cards
+            </span>
+          </HeaderNavLink>
         </NavbarBrand>
 
         <NavbarCollapse className="font-semibold max-md:order-2">
@@ -45,13 +51,9 @@ const Header = () => {
             <div className="flex items-center gap-6 max-md:flex-col">
               {isAuthenticated && user && (
                 <>
-                  <HeaderNavLink to="/favorites">
-                    Favorites
-                  </HeaderNavLink>
+                  <HeaderNavLink to="/favorites">Favorites</HeaderNavLink>
                   {user.isBusiness && (
-                    <HeaderNavLink to="/my-cards">
-                      My Cards
-                    </HeaderNavLink>
+                    <HeaderNavLink to="/my-cards">My Cards</HeaderNavLink>
                   )}
                 </>
               )}
@@ -71,27 +73,22 @@ const Header = () => {
             <div className="flex items-center gap-6 max-md:flex-col">
               {!isAuthenticated ? (
                 <>
-                  <HeaderNavLink to="/login">
-                    Sign In
-                  </HeaderNavLink>
-                  <HeaderNavLink to="/register">
-                    Register
-                  </HeaderNavLink>
+                  <HeaderNavLink to="/login">Sign In</HeaderNavLink>
+                  <HeaderNavLink to="/register">Register</HeaderNavLink>
                 </>
               ) : (
                 <>
-                  <HeaderNavLink to="/profile">
-                    Profile
-                  </HeaderNavLink>
-                  <HeaderNavLink to="#" onClick={() => dispatch(ModalActions.openModal())}>
+                  <HeaderNavLink to="/profile">Profile</HeaderNavLink>
+                  <HeaderNavLink
+                    to="#"
+                    onClick={() => dispatch(ModalActions.openModal())}
+                  >
                     Logout
                   </HeaderNavLink>
                 </>
               )}
 
-              <HeaderNavLink to="/about">
-                About
-              </HeaderNavLink>
+              <HeaderNavLink to="/about">About</HeaderNavLink>
             </div>
           </div>
         </NavbarCollapse>
