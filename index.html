@@ -7,6 +7,13 @@
     <title>Business Cards</title>
   </head>
   <body>
+    <script>
+      // Apply theme immediately to prevent flickering
+      const theme = localStorage.getItem('flowbite-theme-mode') || 'light';
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

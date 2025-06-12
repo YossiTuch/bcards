@@ -1,5 +1,4 @@
 import {
-  DarkThemeToggle,
   Navbar,
   NavbarBrand,
   NavbarCollapse,
@@ -7,6 +6,7 @@ import {
   NavbarToggle,
   TextInput,
 } from "flowbite-react";
+import { DarkModeButton } from "../components/DarkModeButton";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { IoSearchSharp } from "react-icons/io5";
@@ -119,7 +119,7 @@ const Header = () => {
 
         {/* Theme Toggle & Mobile Menu */}
         <div className="flex items-center gap-2">
-          <DarkThemeToggle />
+          <DarkModeButton />
           <NavbarToggle />
         </div>
       </Navbar>
