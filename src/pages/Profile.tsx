@@ -40,7 +40,11 @@ const Profile = () => {
             )}
             {/* Edit Profile Button */}
             <Link to="/edit-profile" className="mt-4">
-              <Button size="sm" className="flex items-center gap-2">
+              <Button
+                size="sm"
+                color="alternative"
+                className="flex items-center gap-2"
+              >
                 <FaEdit />
                 Edit Profile
               </Button>
