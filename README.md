@@ -100,13 +100,6 @@ The application uses JWT (JSON Web Tokens) for authentication. Tokens can be sto
 - Customizable card layouts
 - Flexible form fields for cards and profiles
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
