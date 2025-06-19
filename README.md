@@ -50,7 +50,7 @@ A modern web application for creating, managing, and sharing digital business ca
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
+git clone https://github.com/YossiTuch/bcards.git
 ```
 
 2. Install dependencies:
